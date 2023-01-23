@@ -46,17 +46,20 @@ function logar(){
   botaoAtivo = document.querySelector(".botaoEnviar");
   inputAtivo = document.querySelector(".message-input input");
   setTimeout(function(){document.querySelector(".loading").classList.add("hidden");}, 2000);
+  carregarMensagens();
+  exibirMensagens();
+  setInterval(carregarMensagens, 3000);
   const promessa = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', usuario);
   promessa.then(entrarNaSala);
   promessa.catch(erroLogin);
 }
 function entrarNaSala(resposta){
+  console.log(resposta);
   document.querySelector("footer input").value = "";
   mensagemErro.classList.add("hidden");
   document.querySelector(".login-screen").classList.add("hidden");
   botaoAtivo = document.querySelector(".botaoEnviar");
   inputAtivo = document.querySelector(".message-input input");
-  setInterval(carregarMensagens, 3000);
   setInterval(manterConexao, 5000);
   setInterval(carregarParticipantes, 10000);
   carregarMensagens();
