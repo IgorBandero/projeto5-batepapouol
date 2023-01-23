@@ -40,90 +40,49 @@ function ativarBotao(input){
 }
 function logar(){
   nome = document.querySelector(".login-screen input").value;
-  let usuario = {name: nome};
+  const usuario = 
+  {
+    name: nome
+  };
   const loading = document.querySelector(".loading");
   loading.classList.remove("hidden");
   botaoAtivo = document.querySelector(".botaoEnviar");
   inputAtivo = document.querySelector(".message-input input");
   setTimeout(function(){document.querySelector(".loading").classList.add("hidden");}, 2000);
-  carregarMensagens();
-  exibirMensagens();
-  setInterval(carregarMensagens, 3000);
   const promessa = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', usuario);
   promessa.then(entrarNaSala);
   promessa.catch(erroLogin);
 }
 function entrarNaSala(resposta){
   console.log(resposta);
-  document.querySelector("footer input").value = "";
-  mensagemErro.classList.add("hidden");
-  document.querySelector(".login-screen").classList.add("hidden");
-  botaoAtivo = document.querySelector(".botaoEnviar");
-  inputAtivo = document.querySelector(".message-input input");
-  setInterval(manterConexao, 5000);
-  setInterval(carregarParticipantes, 10000);
-  carregarMensagens();
-  carregarParticipantes();
-}
-function carregarMensagens(){
-  const promesssa = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
-  promesssa.then(pegouMensagens); 
-  promesssa.catch(erro);
-}
-function exibirMensagens(){
-  console.log("LISTA DE MENSAGENS: " + listaMensagens);
-  const chat = document.querySelector(".chat");
-  let mensagem;
-  chat.innerHTML = "";  
-  for (let i = 0; i < listaMensagens.length; i++){
-    if (listaMensagens[i].type === "status"){
-      mensagem = `<li data-test="message" class="log"> 
-                    <p> <span class="time">(${listaMensagens[i].time})</span>
-                    <span class="author">${listaMensagens[i].from}</span>
-                    <span class="message-text">${listaMensagens[i].text}</span></p>
-                  </li> `;
-      chat.innerHTML = chat.innerHTML + mensagem;
-    }
-    if (listaMensagens[i].type === "message"){
-      mensagem = `<li data-test="message" class="public message"> 
-                    <p> <span class="time">(${listaMensagens[i].time})</span>
-                    <span class="author">${listaMensagens[i].from}</span>
-                    para
-                    <span class="receiver">${listaMensagens[i].to}</span>: 
-                    <span class="message-text">${listaMensagens[i].text}</span></p>
-                  </li> `;
-      chat.innerHTML = chat.innerHTML + mensagem;
-    }
-    if (listaMensagens[i].type === "private_message" && (listaMensagens[i].from.toLowerCase().trim() === nome.toLowerCase().trim() || listaMensagens[i].to.toLowerCase().trim() === nome.toLowerCase().trim())){
-      mensagem = `<li data-test="message" class="private message"> 
-                    <p> <span class="time">(${listaMensagens[i].time})</span>
-                    <span class="author">${listaMensagens[i].from}</span>
-                    <span class="privately">reservadamente</span>
-                    para
-                    <span class="receiver">${listaMensagens[i].to}</span>: 
-                    <span class="message-text">${listaMensagens[i].text}</span></p>
-                  </li> `;
-      chat.innerHTML = chat.innerHTML + mensagem;
-    }    
-  }
-  chat.innerHTML = chat.innerHTML + `<div class="final"> </div>`;
-  document.querySelector(".final").scrollIntoView(false);
+  if (resposta.status === 200){
+    document.querySelector("footer input").value = "";
+    mensagemErro.classList.add("hidden");
+    document.querySelector(".login-screen").classList.add("hidden");
+    botaoAtivo = document.querySelector(".botaoEnviar");
+    inputAtivo = document.querySelector(".message-input input");
+    carregarMensagens();
+    carregarParticipantes();
+    setInterval(carregarMensagens, 3000);
+    setInterval(manterConexao, 5000);
+    setInterval(carregarParticipantes, 10000);  
+  }  
 }
 function manterConexao(){
-  let usuario = {name: nome};
+  let usuario = 
+  {
+    name: nome
+  };
   const promessa = axios.post('https://mock-api.driven.com.br/api/v6/uol/status', usuario);
+  promessa.then(() => console.log("Logado"));
   promessa.catch(() => window.location.reload());
-  //promessa.then(taOn);
-  //promessa.catch(taOff);
 }
 function erroLogin(erro){
-  if (erro.response.status === 400){
-    document.querySelector(".login-screen input").style.backgroundColor = "rgb(255, 216, 216)";
-    mensagemErro.innerHTML = `O nome ${nome} já está em uso! <br> Por favor digite outro nome`;
-    mensagemErro.classList.remove("hidden");
-    botaoAtivo = document.querySelector(".login-Button");
-    inputAtivo = document.querySelector(".login-screen input");
-  }
+  document.querySelector(".login-screen input").style.backgroundColor = "rgb(255, 216, 216)";
+  mensagemErro.innerHTML = `O nome ${nome} já está em uso! <br> Por favor digite outro nome`;
+  mensagemErro.classList.remove("hidden");
+  botaoAtivo = document.querySelector(".login-Button");
+  inputAtivo = document.querySelector(".login-screen input");
 }
 function abrirSidebar(){
   document.querySelector(".titulo").scrollIntoView(true);
@@ -265,11 +224,11 @@ function enviarMensagem(){
         to: destinatario,
         text: textoMensagem.value,
         type: privacidade
-    }
-    textoMensagem.value = "";
+    }    
     const promessa = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", msg);
     promessa.then(enviouMensagem);
-    promessa.catch(erroMensagem)
+    promessa.catch(erroMensagem);
+    textoMensagem.value = "";
 }
 function verificaDestinatarioOnline(resposta) {
   let usersOnline = ["Todos"];
@@ -310,8 +269,51 @@ function enviouMensagem(resposta){
     console.log(resposta);
     carregarMensagens();
 }
+function carregarMensagens(){
+    const promesssa = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
+    promesssa.then(pegouMensagens); 
+    promesssa.catch(erro);
+    setTimeout((carregarMensagens), 3000);
+}
 function pegouMensagens(resposta){
     listaMensagens = resposta.data;
-    console.log("LISTA DE MENSAGENS: " + listaMensagens);
     exibirMensagens();
+}
+function exibirMensagens(){
+    const chat = document.querySelector(".chat");
+    let mensagem;
+    chat.innerHTML = "";  
+    for (let i = 0; i < listaMensagens.length; i++){
+      if (listaMensagens[i].type === "status"){
+        mensagem = `<li data-test="message" class="log"> 
+                      <p> <span class="time">(${listaMensagens[i].time})</span>
+                      <span class="author">${listaMensagens[i].from}</span>
+                      <span class="message-text">${listaMensagens[i].text}</span></p>
+                    </li> `;
+        chat.innerHTML = chat.innerHTML + mensagem;
+      }
+      if (listaMensagens[i].type === "message"){
+        mensagem = `<li data-test="message" class="public message"> 
+                      <p> <span class="time">(${listaMensagens[i].time})</span>
+                      <span class="author">${listaMensagens[i].from}</span>
+                      para
+                      <span class="receiver">${listaMensagens[i].to}</span>: 
+                      <span class="message-text">${listaMensagens[i].text}</span></p>
+                    </li> `;
+        chat.innerHTML = chat.innerHTML + mensagem;
+      }
+      if (listaMensagens[i].type === "private_message" && (listaMensagens[i].from.toLowerCase().trim() === nome.toLowerCase().trim() || listaMensagens[i].to.toLowerCase().trim() === nome.toLowerCase().trim())){
+        mensagem = `<li data-test="message" class="private message"> 
+                      <p> <span class="time">(${listaMensagens[i].time})</span>
+                      <span class="author">${listaMensagens[i].from}</span>
+                      <span class="privately">reservadamente</span>
+                      para
+                      <span class="receiver">${listaMensagens[i].to}</span>: 
+                      <span class="message-text">${listaMensagens[i].text}</span></p>
+                    </li> `;
+        chat.innerHTML = chat.innerHTML + mensagem;
+      }    
+    }
+    chat.innerHTML = chat.innerHTML + `<div class="final"> </div>`;
+    document.querySelector(".final").scrollIntoView(false);
 }
