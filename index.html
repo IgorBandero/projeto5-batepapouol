@@ -15,20 +15,24 @@
 </head>
 <body>    
 
+    <!-- Tela de login inicial -->
     <div class="login-screen">
-        <img class="logo" src="./img/bate-papo.png" alt="Logo">
+        <img class="logo" src="./img/bate-papo.png" alt="">
         <input data-test="input-name" onclick="resetInput(this);" oninput="ativarBotao(this);" type="text" placeholder="Digite o seu nome" autocomplete="off">
         <button data-test="send-name" class="login-Button" onclick="logar();" disabled> Entrar </button>
     </div>
 
-    <span class="error hidden">  </span>
+    <!-- Span para receber a mensagem de erro caso o usuário entre com um nome indisponível -->
+    <span class="error hidden"> </span>
 
+    <!-- Tela com o efeito de "carregando" que aparece quando o usuário tenta fazer login-->
     <div class="loading hidden">
         <img class="logo" src="./img/bate-papo.png" alt="Logo">
         <img class="gif" src="./img/carregando.gif" alt="">
         <p> Entrando... </p>
     </div>
 
+    <!-- Sala de bate-papo -->
     <div class="container">
 
         <header>
@@ -38,24 +42,26 @@
             </button>
         </header>
 
-        <ul class="chat">
+        <!-- ul para receber as mensagens do chat -->
+        <ul class="chat"> </ul>
 
-        </ul>
-
+        <!-- Menu lateral com a lista de usuários online -->
         <aside class="users-list hidden">
 
+            <!-- Parte branca do menu -->
             <div class="front-aside">
                 <div class="titulo">    
                     <h2> Escolha um contato para enviar mensagem: </h2>
                 </div>   
-                <ul class="users">
-                
-                </ul>
+
+                <!-- ul recebe a lista de usuários online -->
+                <ul class="users"> </ul>
     
                 <div class="subtitulo">
                     <h2> Escolha a visibilidade </h2>
                 </div>
-    
+                
+                <!-- Opções de visibilidade para o envio de mensagem (Pública ou Privada)-->
                 <ul>
                     <li data-test="public" class="privacy publica" onclick="statusPrivacidade(this);"> 
                         <div>
@@ -72,21 +78,25 @@
                         <ion-icon data-test="check" name="checkmark-sharp" class="hidden"></ion-icon>
                     </li>    
                 </ul>    
-            </div>             
-            <div data-test="overlay" class="back-aside" onclick="fecharSidebar()"> </div> 
-      
+            </div>            
+
+            <!-- Parte preta do menu que ao ser clicada fecha o menu lateral -->
+            <div data-test="overlay" class="back-aside" onclick="fecharSidebar()"> </div>      
         </aside> 
     
+
         <footer>
+            <!-- caixa de texto para escrever mensagem e informação sobre visibilidade-->
             <div class="message-input"> 
                 <input data-test="input-message" type="text" placeholder="Escreva aqui...">
                 <div data-test="recipient" class="caixa-mensagem"> </div>
             </div>
+
+            <!-- Botão de enviar mensagem-->
             <button onclick="enviarMensagem()" data-test="send-message" class="botaoEnviar">
                 <ion-icon name="paper-plane-outline"></ion-icon>
             </button>                  
         </footer>
-
     </div>    
    
     <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
