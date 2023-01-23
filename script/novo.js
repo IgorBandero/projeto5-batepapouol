@@ -6,6 +6,7 @@ let usuarios = ["Todos"];
 let privacidade = "message";
 let destinatario = "Todos";
 let textoPrivacidade ="";
+let listaMensagens = [];
 
 configuraTextoPrivacidade();
 
@@ -61,14 +62,13 @@ function entrarNaSala(resposta){
   carregarMensagens();
   carregarParticipantes();
 }
-function carregarMensagens(resposta){
-  console.log(resposta);
+function carregarMensagens(){
   const promesssa = axios.get('https://mock-api.driven.com.br/api/v6/uol/messages');
-  promesssa.then(exibirMensagens); 
+  promesssa.then(pegouMensagens); 
   promesssa.catch(erro);
 }
-function exibirMensagens(resposta){
-  const listaMensagens = resposta.data;
+function exibirMensagens(){
+  console.log("LISTA DE MENSAGENS: " + listaMensagens);
   const chat = document.querySelector(".chat");
   let mensagem;
   chat.innerHTML = "";  
@@ -255,7 +255,7 @@ function configuraTextoPrivacidade(){
   configMensagem.innerHTML = `<p>Enviando para <span class="receiver-selected"> ${destinatario} </span> (<span class="privacy-selected">${textoPrivacidade}</span>)</p>`;
 }
 function enviarMensagem(){
-    let textoMensagem = document.querySelector(".message-input input");
+    let textoMensagem = document.querySelector('.message-input input');
     let msg = 
     {
         from: nome,
@@ -265,7 +265,7 @@ function enviarMensagem(){
     }
     textoMensagem.value = "";
     const promessa = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", msg);
-    promessa.then(carregarMensagens);
+    promessa.then(enviouMensagem);
     promessa.catch(erroMensagem)
 }
 function verificaDestinatarioOnline(resposta) {
@@ -302,4 +302,13 @@ function erroMensagem(resposta){
 }
 function erro(resposta){
     console.log(resposta);
+}
+function enviouMensagem(resposta){
+    console.log(resposta);
+    carregarMensagens();
+}
+function pegouMensagens(resposta){
+    listaMensagens = resposta.data;
+    console.log("LISTA DE MENSAGENS: " + listaMensagens);
+    exibirMensagens();
 }
